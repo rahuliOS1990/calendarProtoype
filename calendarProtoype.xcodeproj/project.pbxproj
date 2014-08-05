@@ -21,6 +21,9 @@
 		9DA7974D1990C2D000100048 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA7972F1990C2CF00100048 /* UIKit.framework */; };
 		9DA797551990C2D000100048 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9DA797531990C2D000100048 /* InfoPlist.strings */; };
 		9DA797571990C2D000100048 /* calendarProtoypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DA797561990C2D000100048 /* calendarProtoypeTests.m */; };
+		9DA797611990C6F900100048 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA797601990C6F900100048 /* EventKitUI.framework */; };
+		9DA797641990C71D00100048 /* LSEventEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DA797631990C71D00100048 /* LSEventEditVC.m */; };
+		9DA7976A19910D5F00100048 /* LSEventEditTbleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DA7976919910D5F00100048 /* LSEventEditTbleViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,11 @@
 		9DA797521990C2D000100048 /* calendarProtoypeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "calendarProtoypeTests-Info.plist"; sourceTree = "<group>"; };
 		9DA797541990C2D000100048 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9DA797561990C2D000100048 /* calendarProtoypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = calendarProtoypeTests.m; sourceTree = "<group>"; };
+		9DA797601990C6F900100048 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		9DA797621990C71D00100048 /* LSEventEditVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LSEventEditVC.h; path = calendarProtoype/LSEventEditVC.h; sourceTree = "<group>"; };
+		9DA797631990C71D00100048 /* LSEventEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LSEventEditVC.m; path = calendarProtoype/LSEventEditVC.m; sourceTree = "<group>"; };
+		9DA7976819910D5F00100048 /* LSEventEditTbleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSEventEditTbleViewCell.h; sourceTree = "<group>"; };
+		9DA7976919910D5F00100048 /* LSEventEditTbleViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEventEditTbleViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DA797611990C6F900100048 /* EventKitUI.framework in Frameworks */,
 				9DA7972E1990C2CF00100048 /* CoreGraphics.framework in Frameworks */,
 				9DA797301990C2CF00100048 /* UIKit.framework in Frameworks */,
 				9DA7972C1990C2CF00100048 /* Foundation.framework in Frameworks */,
@@ -82,6 +91,10 @@
 		9DA7971F1990C2CF00100048 = {
 			isa = PBXGroup;
 			children = (
+				9DA7976819910D5F00100048 /* LSEventEditTbleViewCell.h */,
+				9DA7976919910D5F00100048 /* LSEventEditTbleViewCell.m */,
+				9DA797621990C71D00100048 /* LSEventEditVC.h */,
+				9DA797631990C71D00100048 /* LSEventEditVC.m */,
 				9DA797311990C2CF00100048 /* calendarProtoype */,
 				9DA797501990C2D000100048 /* calendarProtoypeTests */,
 				9DA7972A1990C2CF00100048 /* Frameworks */,
@@ -101,6 +114,7 @@
 		9DA7972A1990C2CF00100048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9DA797601990C6F900100048 /* EventKitUI.framework */,
 				9DA7972B1990C2CF00100048 /* Foundation.framework */,
 				9DA7972D1990C2CF00100048 /* CoreGraphics.framework */,
 				9DA7972F1990C2CF00100048 /* UIKit.framework */,
@@ -251,6 +265,8 @@
 			files = (
 				9DA797421990C2CF00100048 /* ViewController.m in Sources */,
 				9DA7973C1990C2CF00100048 /* AppDelegate.m in Sources */,
+				9DA797641990C71D00100048 /* LSEventEditVC.m in Sources */,
+				9DA7976A19910D5F00100048 /* LSEventEditTbleViewCell.m in Sources */,
 				9DA797381990C2CF00100048 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,7 +395,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "calendarProtoype/calendarProtoype-Prefix.pch";
 				INFOPLIST_FILE = "calendarProtoype/calendarProtoype-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -392,7 +410,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "calendarProtoype/calendarProtoype-Prefix.pch";
 				INFOPLIST_FILE = "calendarProtoype/calendarProtoype-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -456,6 +476,7 @@
 				9DA7975C1990C2D000100048 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9DA7975D1990C2D000100048 /* Build configuration list for PBXNativeTarget "calendarProtoypeTests" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +485,7 @@
 				9DA7975F1990C2D000100048 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
