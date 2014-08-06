@@ -21,6 +21,8 @@
     NSDate *dateEnd;
     
     UITableView *tblView;
+    
+    BOOL isDisplayRedAlertMessage;
 
     NSIndexPath *indexPathEndDate;
 }
@@ -147,6 +149,14 @@
         
         UILabel *lbl=(UILabel*)[cell.contentView viewWithTag:110];
         lbl.text=[NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:dateStrt]];
+        if (isDisplayRedAlertMessage) {
+            lbl.textColor=[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
+        }
+        else
+        {
+            lbl.textColor=[UIColor blackColor];
+        }
+        
         return cell;
     }
     else if (indexPath.section==indexPathEndDate.section && indexPath.row==indexPathEndDate.row) {
@@ -186,13 +196,34 @@
         
         UILabel *lbl=(UILabel*)[cell.contentView viewWithTag:110];
         lbl.text=[NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:dateEnd]];
+        if (isDisplayRedAlertMessage) {
+            lbl.textColor=[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f];
+        }
+        else
+        {
+            lbl.textColor=[UIColor blackColor];
+        }
         return cell;
     }
     else
     {
         cell=[_ekEventEditorDelegate tableView:tableView cellForRowAtIndexPath:indexPath];
         
-        NSLog(@"print table view cell subviews %@",cell.contentView.subviews);
+        if (indexPath.section==0 && indexPath.row==0) {
+            
+            for (UIView *view in cell.contentView.subviews) {
+                if ([view isKindOfClass:NSClassFromString(@"UITextField")]) {
+                    UITextField *txtField=(UITextField*)view;
+                    if ([txtField.placeholder isEqualToString:@"Title"]) {
+                        [txtField setPlaceholder:@"Add a Focus"];
+                    }
+                }
+            }
+            
+        }
+        
+       
+        
         
         return cell;
     }
@@ -300,15 +331,21 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if (isDisplayRedAlertMessage && section==1) {
+        
+    
+    
     UILabel *lbl=[[UILabel alloc] initWithFrame:CGRectMake(10,-30, 300, 100)];
     [lbl setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:14.0f]];
     [lbl setTextColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1.0f]];
-    lbl.text=@"dasd";
-    // lbl.textAlignment=NSTextAlignmentCenter;
-    lbl.contentMode=UIViewContentModeTopLeft;
-    [lbl sizeToFit];
+    lbl.text=@"An event is already scheduled for this time.";
+    lbl.textAlignment=NSTextAlignmentCenter;
+    //[lbl sizeToFit];
     //  [lbl setBackgroundColor:[UIColor blackColor]];
     return lbl;
+    }
+    else
+        return [_ekEventEditorDelegate tableView:tableView viewForHeaderInSection:section];
 }
 
 
@@ -354,10 +391,13 @@
             
             // Fetch all events that match the predicate
             NSArray *events = [self.eventStore eventsMatchingPredicate:predicate];
-            
+            isDisplayRedAlertMessage=NO;
             NSLog(@"print events  %@",events);
+
             if (events.count>0) {
+                isDisplayRedAlertMessage=YES;
             }
+            [tblView reloadData];
         }
 
         
