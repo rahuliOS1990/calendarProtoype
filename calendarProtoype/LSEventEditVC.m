@@ -23,7 +23,9 @@
     UITableView *tblView;
     
     BOOL isDisplayRedAlertMessage;
-
+    BOOL isStrtDatePickerOpened;
+    BOOL isEndDatePickerOpened;
+    
     NSIndexPath *indexPathEndDate;
 }
 
@@ -41,7 +43,7 @@
     indexPathEndDate=[NSIndexPath indexPathForRow:2 inSection:1];
     dateStrt=[NSDate date];
     dateEnd=[NSDate dateWithTimeInterval:60*60 sinceDate:dateStrt];
-    
+   
     // Do any additional setup after loading the view.
     
     
@@ -80,7 +82,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (isOpenDatePicker && section==1) {
+    if ((isStrtDatePickerOpened || isEndDatePickerOpened) && section==1) {
         return [_ekEventEditorDelegate tableView:tableView numberOfRowsInSection:section]+1;
     }
     NSLog(@"number of rows %d ",[_ekEventEditorDelegate tableView:tableView numberOfRowsInSection:section]);
@@ -91,7 +93,7 @@
 {
     UITableViewCell *cell=nil;
     
-    if (isOpenDatePicker && indexPath.section==selectedIndexPathToInsertDatePicker.section && indexPath.row==selectedIndexPathToInsertDatePicker.row) {
+    if ((isStrtDatePickerOpened || isEndDatePickerOpened) && indexPath.section==selectedIndexPathToInsertDatePicker.section && indexPath.row==selectedIndexPathToInsertDatePicker.row) {
         
         
         static NSString *cellIdentifier=@"DatePciker";
@@ -99,12 +101,18 @@
         if (cell==nil) {
             cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             UIDatePicker *datePicker=[[UIDatePicker alloc] init];
-            datePicker.date=dateStrt;
             datePicker.tag=110;
             [cell.contentView addSubview:datePicker];
         }
         
         UIDatePicker *datePicker=(UIDatePicker*)[cell.contentView viewWithTag:110];
+        
+        if (selectedIndexPathToInsertDatePicker.row==2)
+            datePicker.date=dateStrt;
+        
+        else
+            datePicker.date=dateEnd;
+        
          [datePicker addTarget:self action:@selector(dateSelected:) forControlEvents:UIControlEventValueChanged];
         
         
@@ -240,35 +248,32 @@
     if ([cell isKindOfClass:NSClassFromString(@"LSEventEditTbleViewCell")]) {
       
         LSEventEditTbleViewCell *lsCell=(LSEventEditTbleViewCell*)cell;
-        lsCell.isOpened=!lsCell.isOpened;
         
-        if (indexPath.section==1 && indexPath.row==1 && lsCell.isOpened) {
-            isOpenDatePicker=YES;
-            selectedIndexPathToInsertDatePicker=[NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
-            indexPathEndDate=[NSIndexPath indexPathForRow:3 inSection:1];
-            [tableView reloadData];
-        }
-        else if (indexPath.section==1 && indexPath.row==1 && !lsCell.isOpened) {
-            isOpenDatePicker=NO;
-            selectedIndexPathToInsertDatePicker=nil;
-            indexPathEndDate=[NSIndexPath indexPathForRow:2 inSection:1];
-            [tableView reloadData];
-            
-        }
-        else if(indexPath.section==1 && indexPath.row==2 && lsCell.isOpened) {
-            isOpenDatePicker=YES;
-            selectedIndexPathToInsertDatePicker=[NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
-            indexPathEndDate=[NSIndexPath indexPathForRow:2 inSection:1];
-            [tableView reloadData];
-        }
-        else if (indexPath.section==1 && indexPath.row==2 && !lsCell.isOpened) {
-            isOpenDatePicker=NO;
-            selectedIndexPathToInsertDatePicker=nil;
-            indexPathEndDate=[NSIndexPath indexPathForRow:2 inSection:1];
-            [tableView reloadData];
-            
-        }
         
+        indexPathEndDate=[NSIndexPath indexPathForRow:2 inSection:1];
+
+        
+        if (indexPath.section==1 && indexPath.row==1) {
+            isStrtDatePickerOpened=!isStrtDatePickerOpened;
+        
+            if (isStrtDatePickerOpened) {
+                isEndDatePickerOpened=NO;
+                selectedIndexPathToInsertDatePicker=[NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+                indexPathEndDate=[NSIndexPath indexPathForRow:3 inSection:1];
+            }
+        }
+        if ((indexPath.section==1 && indexPath.row==2) || (isStrtDatePickerOpened && indexPath.section==1 && indexPath.row==3)) {
+            isEndDatePickerOpened=!isEndDatePickerOpened;
+          
+            if (isEndDatePickerOpened) {
+                isStrtDatePickerOpened=NO;
+                selectedIndexPathToInsertDatePicker=[NSIndexPath indexPathForRow:3 inSection:1];
+            }
+        }
+       
+        
+        [tableView reloadData];
+
     }
     
     
@@ -280,48 +285,12 @@
     
 }
 
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [_ekEventEditorDelegate tableView:tableView didDeselectRowAtIndexPath:indexPath];
-}
-
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-    [_ekEventEditorDelegate tableView:tableView moveRowAtIndexPath:sourceIndexPath toIndexPath:destinationIndexPath];
-}
-
--(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [_ekEventEditorDelegate tableView:tableView willBeginEditingRowAtIndexPath:indexPath];
-}
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [_ekEventEditorDelegate tableView:tableView commitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
-}
-
--(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [_ekEventEditorDelegate tableView:tableView didEndEditingRowAtIndexPath:indexPath];
-}
-
-
--(NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
-{
-    return [_ekEventEditorDelegate tableView:tableView targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
-}
-
--(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [_ekEventEditorDelegate tableView:tableView willSelectRowAtIndexPath:indexPath];
-}
-
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"section %d row %d height %f",indexPath.section,indexPath.row,[_ekEventEditorDelegate tableView:tableView heightForRowAtIndexPath:indexPath]);
     
-    if (isOpenDatePicker && indexPath.section==selectedIndexPathToInsertDatePicker.section && indexPath.row==selectedIndexPathToInsertDatePicker.row) {
+    if ((isStrtDatePickerOpened || isEndDatePickerOpened) && indexPath.section==selectedIndexPathToInsertDatePicker.section && indexPath.row==selectedIndexPathToInsertDatePicker.row) {
         return 216;
     }
     
@@ -405,6 +374,27 @@
     [tblView reloadData];
 }
 
+-(EKEvent *)event
+{
+    EKEvent *event=[super event];
+    event.startDate=dateStrt;
+    event.endDate=dateEnd;
+    NSLog(@"descriptiuon %@",event);
+    return event;
+    
+}
+
+-(void)cancelEditing
+{
+    [super cancelEditing];
+}
+
+-(UIBarButtonItem *)editButtonItem
+{
+    NSLog(@"print %@",[super editButtonItem]);
+    
+    return [super editButtonItem];
+}
 
 
 @end

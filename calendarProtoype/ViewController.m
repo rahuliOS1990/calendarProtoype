@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "LSEventEditVC.h"
-#import "LSEventEditVC.h"
 
 @interface ViewController ()
 {
@@ -64,18 +63,35 @@
 {
     LSEventEditVC *eventeditVC=[[LSEventEditVC alloc] init];
     eventeditVC.eventStore=eventStore;
-    //eventeditVC.event=event;
+    
     eventeditVC.delegate=eventeditVC;
+
     
     
+    eventeditVC.editViewDelegate=self;
     
     
     // present EventsAddViewController as a modal view controller
     [self presentViewController:eventeditVC animated:YES completion:^{
-        
+      
     }];
     
 }
+
+
+-(void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action
+{
+    NSLog(@"Clicked Cancel or Done");
+  
+      NSLog(@"control;er %@",controller.event);
+    [self dismissViewControllerAnimated:YES completion:^{
+      
+        
+    }];
+}
+
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
